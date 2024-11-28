@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini Project 23</title>
+    <style>
+        .body {
+            font-family: Times New Roman;
+            margin: 100px;
+            font-size: 30px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        
+        #dataForm {
+            margin-bottom: 50px;
+        }
+
+        #nama, #berat, #gambar {
+            border: 1px solid black;
+            font-size: 20px;
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        #nama {
+            margin-left: 20px;
+        }
+
+        #berat {
+            margin-left: 110px;
+        }
+
+        #gambar {
+            margin-left: 70px;
+        }
+        
+        #button {
+            padding: 10px;
+            margin-top: 20px;
+            margin-left: 190px;
+            font-size: 20px;
+            border-radius: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 20px;
+            text-align: center;
+        }
+
+        button {
+            margin-top: 5px;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 20px;
+        }
+
+        .edit-button, .delete-button {
+            margin-left: 10px;
+        }
+
+        .edit-input {
+            width: 80%;
+            font-size: 18px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body class="body">
+    <div class="container">
+        <form id="dataForm">
+            <label>Nama Buah</label>
+            <input type="text" id="nama" required><br>
+            <label>Berat</label>
+            <input type="number" id="berat" required> <label>Kg</label><br>
+            <label>Gambar</label>
+            <input type="text" id="gambar"><br>
+            <button type="submit" id="button">Add</button>
+        </form>
+        
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Buah</th>
+                    <th>Berat</th>
+                    <th>Gambar</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        let currentId = 1;
+
+        document.getElementById('dataForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const nama = document.getElementById('nama').value;
+            const berat = document.getElementById('berat').value;
+            const gambar = document.getElementById('gambar').value;
+
+            const table = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+
+            const cellNo = newRow.insertCell(0);
+            const cellName = newRow.insertCell(1);
+            const cellWeight = newRow.insertCell(2);
+            const cellImage = newRow.insertCell(3);
+            const cellAction = newRow.insertCell(4);
+
+            cellNo.textContent = currentId;
+
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = nama;
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.value = nama;
+            nameInput.classList.add('edit-input');
+            nameInput.style.display = 'none';
+
+            const weightSpan = document.createElement('span');
+            weightSpan.textContent = berat;
+            const weightInput = document.createElement('input');
+            weightInput.type = 'number';
+            weightInput.value = berat;
+            weightInput.classList.add('edit-input');
+            weightInput.style.display = 'none';
+
+            const imageSpan = document.createElement('span');
+            imageSpan.textContent = gambar;
+            const imageInput = document.createElement('input');
+            imageInput.type = 'text';
+            imageInput.value = gambar;
+            imageInput.classList.add('edit-input');
+            imageInput.style.display = 'none';
+
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Edit';
+            editButton.classList.add('edit-button');
+            editButton.addEventListener('click', function() {
+                toggleEdit(newRow, nameSpan, nameInput, weightSpan, weightInput, imageSpan, imageInput, editButton);
+            });
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Hapus';
+            deleteButton.classList.add('delete-button');
+            deleteButton.addEventListener('click', function() {
+                deleteRow(newRow);
+            });
+
+            cellName.appendChild(nameSpan);
+            cellName.appendChild(nameInput);
+            cellWeight.appendChild(weightSpan);
+            cellWeight.appendChild(weightInput);
+            cellImage.appendChild(imageSpan);
+            cellImage.appendChild(imageInput);
+            cellAction.appendChild(editButton);
+            cellAction.appendChild(deleteButton);
+
+            currentId++;
+
+            document.getElementById('nama').value = '';
+            document.getElementById('berat').value = '';
+            document.getElementById('gambar').value = '';
+        });
+
+        function toggleEdit(row, nameSpan, nameInput, weightSpan, weightInput, imageSpan, imageInput, editButton) {
+            if (nameInput.style.display === 'none') {
+
+                nameInput.style.display = 'inline-block';
+                weightInput.style.display = 'inline-block';
+                imageInput.style.display = 'inline-block';
+                nameSpan.style.display = 'none';
+                weightSpan.style.display = 'none';
+                imageSpan.style.display = 'none';
+                editButton.textContent = 'Simpan';
+            } else {
+
+                nameSpan.textContent = nameInput.value;
+                weightSpan.textContent = weightInput.value;
+                imageSpan.textContent = imageInput.value;
+
+                nameInput.style.display = 'none';
+                weightInput.style.display = 'none';
+                imageInput.style.display = 'none';
+                nameSpan.style.display = 'inline-block';
+                weightSpan.style.display = 'inline-block';
+                imageSpan.style.display = 'inline-block';
+                editButton.textContent = 'Edit';
+            }
+        }
+
+        function deleteRow(row) {
+            row.remove();
+        }
+    </script>
+</body>
+</html>
